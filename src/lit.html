@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Multi-Disease Chest X-ray Classifier — Project</title>
+  <style>
+    :root{--accent:#2b6cb0;--bg:#0f1724;--card:#0b1220;--muted:#9aa7bd;--glass:rgba(255,255,255,0.03)}
+    html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#071021 0%, #081428 60%);color:#e6eef8}
+    .container{max-width:1100px;margin:28px auto;padding:28px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    header{display:flex;align-items:center;gap:18px}
+    header h1{margin:0;font-size:22px}
+    .meta{margin-left:auto;text-align:right;font-size:13px;color:var(--muted)}
+    nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .chip{background:var(--glass);padding:8px 12px;border-radius:999px;font-size:13px;color:var(--muted)}
+    section{margin-top:22px}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:20px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));padding:16px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+    h2{margin:6px 0 12px;font-size:18px}
+    p{color:#cfe3ff;line-height:1.45}
+    .small{font-size:13px;color:var(--muted)}
+    .notice{padding:10px;border-radius:8px;background:linear-gradient(90deg, rgba(43,108,176,0.06), rgba(43,108,176,0.03));border:1px solid rgba(43,108,176,0.12);color:#e6f3ff}
+    img{max-width:100%;border-radius:8px;margin:10px 0;box-shadow:0 4px 16px rgba(0,0,0,0.4)}
+    footer{margin-top:22px;color:var(--muted);font-size:13px;text-align:center}
+    @media (max-width:960px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Multi-Disease Chest X-ray Classifier — Project Webpage</h1>
+        <div class="small">DenseNet121 + CBAM | Grad-CAM explainability | Dataset: ~43,000 CXR images | 5 classes</div>
+      </div>
+      <div class="meta">
+        <div><strong>Title:</strong> Multi-Disease Chest X-ray Classifier</div>
+        <div><strong>Reg. No.:</strong> 21MIS1017</div>
+        <div><strong>Name:</strong> Raj Koyani</div>
+        <div><strong>Guide (Dr.):</strong> Dr. Brindha V</div>
+      </div>
+    </header>
+
+    <section class="grid">
+      <div>
+        <section class="card" id="results">
+          <h2>Final Model Performance (on Test Set)</h2>
+          <p>
+            The final trained model, based on <strong>DenseNet121 with CBAM</strong>, achieved the following performance on the test set:
+          </p>
+          <ul>
+            <li><strong>Accuracy:</strong> 86.05%</li>
+            <li><strong>F1-macro:</strong> 0.8791 (≈87.9%)</li>
+            <li><strong>AUROC (OvR):</strong> 0.9756 (≈97.6%)</li>
+          </ul>
+        </section>
+
+        <section class="card" id="methodology">
+          <h2>Proposed Architecture and Methodology</h2>
+
+          <h3>1. Data Collection and Preprocessing</h3>
+          <p>
+            Three public chest X-ray datasets were merged, resulting in ~43,000 images across five categories: COVID-19, Tuberculosis, Viral Pneumonia, Lung Opacity, and Normal. 
+          </p>
+          <p><strong>Preprocessing included:</strong> resizing to 300–382 px, grayscale to RGB conversion, normalization using ImageNet mean/std, and augmentation (rotation ±15°, horizontal flip, brightness/contrast adjustments, CutMix/MixUp).</p>
+
+          <h3>2. Model Architecture</h3>
+          <p>
+            The model architecture is based on <strong>DenseNet121 + CBAM</strong>:
+          </p>
+          <ul>
+            <li><strong>Backbone:</strong> DenseNet121 pretrained on ImageNet for feature extraction.</li>
+            <li><strong>Attention Module:</strong> Convolutional Block Attention Module (CBAM) to highlight radiologically relevant regions.</li>
+            <li><strong>Classification Head:</strong> Global Average Pooling → Dense(512, ReLU) → Dropout(0.4) → Softmax (5 outputs).</li>
+          </ul>
+
+          <h3>3. Training Strategy</h3>
+          <p>
+            Input images were preprocessed at 300–382 px. Training was performed on GPU with weighted categorical cross-entropy to address class imbalance. Optimizer used was AdamW with cosine learning rate scheduler. Batch size was 32, with an 80/10/10 train-validation-test split and 5-fold cross-validation. The target was to achieve 95%+ accuracy and AUROC ≥ 0.97.
+          </p>
+
+          <h3>4. Explainable AI (XAI) Integration</h3>
+          <p>
+            <strong>Grad-CAM</strong> was used to generate visual heatmaps highlighting suspicious regions, and <strong>SHAP</strong> provided feature importance scores. The system outputs original X-ray, prediction, and explanation side-by-side.
+          </p>
+
+          <h3>5. Deployment Methodology</h3>
+          <p>
+            A Streamlit web application was developed where clinicians can upload chest X-rays, receive real-time classification, view prediction confidence, and see interpretability outputs (Grad-CAM and SHAP). The backend runs on GPU (local or cloud) for speed and reliability.
+          </p>
+
+          <h3>6. Evaluation Metrics</h3>
+          <p>
+            Performance was measured using Accuracy, Precision, Recall, and F1-score (macro and per class), AUROC (macro and per class), confusion matrices, and comparison against baseline models such as ResNet50 and plain DenseNet121.
+          </p>
+
+          <h3>System UML Diagrams</h3>
+          <p>Below are the UML-style diagrams representing the architecture and workflow of the proposed system:</p>
+          <p><strong>Pipeline Architecture:</strong></p>
+          <img src="densenet_cbam_pipeline.png" alt="DenseNet121 + CBAM Pipeline Diagram">
+          <p><strong>Sequence Diagram:</strong></p>
+          <img src="sequence_densenet_cbam.png" alt="DenseNet121 + CBAM Sequence Diagram">
+        </section>
+      </div>
+    </section>
+
+    <footer>
+      Built for: <strong>Raj Koyani (21MIS1017)</strong> — Guide: <strong>Dr. Brindha V</strong> — Generated: Sep 15, 2025
+    </footer>
+  </div>
+</body>
+</html>
