@@ -34,6 +34,7 @@ The system is deployed as an accessible Streamlit-based web application.
 Real-time Diagnosis: Allows users to upload a chest X-ray image and receive instant prediction results.
 Visual Feedback: Presents the predicted disease class, confidence scores, and the Grad-CAM heatmap for visual interpretation.
 Clinician-Friendly: Designed with an intuitive interface to require minimal technical expertise, making it suitable for quick, reliable diagnosis in hospitals and remote telemedicine settings.
+
 use command: streamlit run app.py
 
 📈 Evaluation
